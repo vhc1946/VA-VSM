@@ -1,0 +1,101 @@
+/* Referal Table Nav */
+#ref-tables-nav{
+    display:flex;
+    background-color: var(--background-med);
+    color:var(--text-dark);
+    position:sticky;
+    top:0px;
+}
+.ref-table-switch{
+    width:120px;
+    text-align: center;
+    margin-top:10px;
+    padding-bottom: 10px;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.ref-table-switch:hover{
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    cursor: pointer;
+}
+.ref-table-switch-selected, .ref-table-switch-selected:hover{
+    background-color: var(--vogel-blue);
+    color:var(--text-light);
+    cursor: default;
+}
+#ref-tables-container{
+    width: 100%;
+}
+
+/* Referal Tables */
+.ref-table{
+    border-collapse: collapse;
+    width:100%;
+}
+.ref-table>tr:first-child{
+    position:sticky;
+    top:45px;
+}
+.ref-table>tr>td{
+    min-width: 80px;
+    max-width: 200px;
+    padding:3px;
+    margin:0px;
+    color:var(--text-dark);
+    font-size: 9.5pt;
+    align-self: center;
+    justify-self: center;
+    word-wrap: break-word;
+    text-align: center;
+}
+.ref-table>tr:first-child>td{
+    font-size: 15pt;
+    font-weight: bold;
+    background-color: var(--vogel-blue);
+    color:var(--text-light);
+}
+.ref-table>tr:nth-child(2n-1){
+    background-color: var(--background-med);
+}
+.ref-table>tr:nth-child(1n+2):hover{
+    background-color: var(--hover-highlight);
+}
+/*------------------*/
+.ref-tablerow-editing{
+    position: relative;
+}
+
+
+/* Referal Table EditBar */
+.ref-tablerow-editbar-butt:hover{
+    cursor:pointer;
+}
+.ref-tablerow-editbar{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 75px;
+    display:flex;
+    justify-content: space-evenly;
+    border: 2px solid rgb(56, 50, 50);
+    background-color: var(--background-light);
+}
+.ref-tablerow-editbar>img{
+    padding: 5px;
+    height:100%;
+    cursor: pointer;
+}
+
+.request-appr{
+    background-color: rgba(2, 160, 50, 0.7);
+}
+.request-deny{
+    background-color: rgba(206, 22, 22, 0.7);
+}
+.request-appr:hover{
+    background-color: rgba(2, 160, 50, 1);
+}
+.request-deny:hover{
+    background-color: rgba(206, 22, 22, 1);
+}

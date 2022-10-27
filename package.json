@@ -1,0 +1,17 @@
+{
+  "name": "sercomm",
+  "version": "1.0.0",
+  "description": "Service Referral Commission",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "app": "electron app.js"
+  },
+  "author": "cmv",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.6.0",
+    "nedb": "^1.8.0",
+    "xlsx": "^0.17.4"
+  }
+}

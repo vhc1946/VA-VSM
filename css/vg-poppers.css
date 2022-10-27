@@ -1,0 +1,25 @@
+
+/* Toast Popouts */
+#vg-toast-tr{
+  position: fixed;
+  background-color: white;
+  right:0px;
+  top: 20px;
+  filter: drop-shadow(3px 3px 5px black);
+  z-index: 100;
+}
+[class*="vg-toast-"]{
+  padding:10px 15px;
+}
+.vg-toast-red{
+  background-color: rgba(255,0,0,.25);
+  border: 3px solid red;
+}
+.vg-toast-yellow{
+  background-color: rgba(255, 255, 0,.25);
+  border: 3px solid yellow;
+}
+.vg-toast-green{
+  background-color: rgba(0,255,0,.25);
+  border: 3px solid green;
+}

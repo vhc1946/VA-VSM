@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script> window.$ = window.jQuery = require("jquery");</script>
+
+        <title>COMMISSION REFERRAL MANAGER</title>
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Oswald"/>
+        <link rel="stylesheet" href="../css/vg-utility.css"/>
+        <link rel="stylesheet" href="../css/referral-general.css"/>
+        <link rel="stylesheet" href="../css/referral-table-styles.css"/>
+        <link rel="stylesheet" href="../css/referral-editor-styles.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+
+        <!--COMMISION SUMMARY----------------------------------->
+        <div id="ref-header">
+            <div></div>
+            <div id="ref-title">VOGEL COMMISSION LOG</div>
+            <div id="GOTO-reporting" class="q-action-button">REPORTING</div>
+        </div>
+
+        <div id="ref-container">
+            <div class="ref-table-descrs">
+                <div id="ref-table-filters">
+                    <div>Tech ID</div><input type="search" id="ref-table-techid" class="ref-table-filter" list="ref-techid-list">
+                    <div>WO #</div><input id="ref-table-wo"/>
+                    <div>Client Name</div><input id="ref-table-custlname" type="search">
+                    <div>Refered To</div><input type="search" id="ref-table-referto" class="ref-table-filter" list="ref-referto-list">
+                    <div>Address</div><input type="search" id="ref-table-address">
+                    <div>Period</div><div id="ref-period-search"><input type="date" id="ref-table-sdate">
+                     - <input type="date" id="ref-table-edate"></div>
+                </div>
+            </div>
+            <div class="ref-table-summary">
+                <div>COMMISSION</div><div id="ref-total-commish">$0</div>
+                <div>APPROVED</div><div id="ref-table-appr-cnt">0</div>
+                <div>LOST</div><div id="ref-table-deni-cnt">0</div>
+                <div>OPEN</div><div id="ref-table-open-cnt">0</div>
+                <div>SUBMITTED</div><div id="ref-sbmt-cnt">0</div>
+            </div>
+            <div class="ref-table-spiff-filter">
+                <div>Residential Renewal Membership $5</div>
+                <div>Residential New Membership $30</div>
+                <div>Residential 1st Year Rewards Memebership $30</div>
+                <div>Residential Replacement Solutions $40 or more</div>
+                <div>Upgraded Renewal Memebership $30</div>
+                <div>Indoor Air Quality or Other Approved Enhancement $30</div>
+                <div>Commercial Replacement Solution $40</div>
+                <div>Commercial Maintenance Referral $10</div>
+                <div>Each Additional Commercial replacement $10</div>
+                <div>Positive Review 4 Star or Higher $5</div>
+            </div>
+            </div>
+        </div>
+        <!------------------------------------------------------>
+        <!--COMMISSION TABLES----------------------------------->
+        <div id="ref-tables-container">
+            <div id="ref-tables-nav">
+                <div id="ref-table-switch-appr" class="ref-table-switch">APPROVED</div>
+                <div id="ref-table-switch-deny" class="ref-table-switch">LOST</div>
+                <div id="ref-table-switch-open" class="ref-table-switch ref-table-switch-selected">OPEN</div>
+                <div id="ref-table-switch-closed" class="ref-table-switch">CLOSED</div>
+            </div>
+            <!------------------------------------------------------------------------------>
+
+            <!-- FILTERED REFERAL VIEWS ----------------------------------------------------
+
+                 Desired views can be added below as a table element. A corresponding button
+                  is put in the nav element. Refer to srvrefdisplay.js for further setup.
+            -->
+            <!--APPROVED COMMISSIONS
+            -->
+
+            <table id="ref-table-appr" class="ref-table" style="display: none;">
+
+            </table>
+            <!--LOST COMMISSIONS
+            -->
+            <table id="ref-table-deny" class="ref-table" style="display: none;">
+
+            </table>
+            <!--OPEN COMMISSIONS
+            -->
+            <table id="ref-table-open" class="ref-table">
+
+            </table>
+            <!--CLOSED COMMISSIONS
+            -->
+            <table id="ref-table-closed" class="ref-table" style="display: none;">
+
+            </table>
+            <!------------------------------------------------------------------------------>
+
+            <!--Referal Edit Screen ---------------------------------------------------------
+                Module called when approving a referal.
+
+                Module is unhidden with "thumbs-up" is pressed
+                 Referal from the row pressed is searched
+                 and loaded to this screen. User then fills
+                 out the remaining information and submits.
+            -->
+            <div id="ref-edit-container" style="display: none;">
+                <div id="ref-edit-module">
+                    <div id="edit-formid" style="display: none;">131254</div><!--HIDDEN-->
+                    <div id="ref-edit-header">
+                        <div id="ref-edit-techinfo">
+                            <div id="edit-techid">VOGCH</div>
+                            <div id="edit-tlname">Vogel</div>
+                            <div id="edit-tfname">Christian</div>
+                        </div>
+                        <div id="edit-wo">3020</div>
+                    </div>
+                    <div id="ref-edit-refer">
+                        <label>Refered To</label><div id="edit-referto">Erin</div>
+                        <label>Refered Date</label><div>DATE</div>
+                    </div>
+                    <div id="ref-edit-comments">
+                        <div>COMMENTS</div>
+                        <textarea id="edit-comments">This is a Comment</textarea>
+                    </div>
+                    <div id="edit-spifffor">Replacement 40 or more</div>
+                    <div id="ref-edit-info">
+                        <label>Client Name</label><input><input>
+                        <label>Address</label><input id="client-addy">
+                    </div>
+
+                    <div id="ref-edit-inputs">
+                        <label>Status</label><input id="edit-status" type="search" list="ref-status-list">
+                        <label>Spiff</label><input id="edit-paid">
+                    </div>
+                    <div id="ref-edit-options">
+                        <div id="edit-submit-button" class="q-action-button">SUBMIT</div>
+                        <div id="edit-cancel-button" class="q-action-button">CANCEL</div>
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------------------------------------------>
+
+        </div>
+
+        <!-- TEMPLATES USED THROUGHOUT PAGE ------------------------------------------------
+
+             Modifications can be made to templates below that will reflect on the page.
+              For further connections between these elements,and those in the dom, refer to
+              srvrefdisplay.js.
+        -->
+        <div id="templates" style="display:none">
+            <!-- OPTION BARS FOR FILTERED TABLE ROWS--------------------->
+            <div id="appr-tablerow-optionbar"><!--approved table-->
+
+                <img class="request-edit">
+            </div>
+            <div id="deny-tablerow-optionbar"><!--denied table-->
+                <img class="request-edit">
+            </div>
+            <div id="open-tablerow-optionbar"><!--open table-->
+                <img class="request-appr">
+                <img class="request-deny">
+                <img class="request-edit">
+            </div>
+            <div id="closed-tablerow-optionbar"><!--closed table-->
+                <img class="request-edit">
+            </div>
+            <!----------------------------------------------------------->
+        </div>
+        <!--------------------------------------------------------------------------------->
+        <!-- DATALIST FOR INPUTS ----------------------------------------------------------
+        -->
+        <div>
+            <datalist id="ref-status-list"><!--STATUS CODE LIST-->
+                <option>O</option>
+                <option>A</option>
+                <option>D</option>
+                <option>C</option>
+            </datalist>
+            <datalist id="ref-techid-list"><!--TECH CODE LIST-->
+
+            </datalist>
+            <datalist id="ref-referto-list"><!--REFER TO LIST-->
+            </datalist>
+            <datalist id="ref-spifffor-list"><!--SPIFF FOR LIST-->
+            </datalist>
+        </div>
+        <!--------------------------------------------------------------------------------->
+    </body>
+
+    <script>
+        const {ipcRenderer} = require('electron');
+
+
+        var {SetDataList,
+             GetDataList} = require('../../repo/toolbox/displaytools.js');
+
+        var {referalls} = require('../js/lstore.js'); //LocalStore
+        var {dashroutes,pageroutes} = require('../js/routes.js'); //Routes to Main Process
+        var { // Service Display Files
+            srdom,
+            SrvReferals,
+            SrvReferalDisplay,
+            setViewSwitches,
+            SetEditModOptions
+        } = require('../js/srvrefdisplay.js');
+        var {SetupEOMButton}=require('../js/referalReport.js');
+
+        /* User Filtering ///////////////////////////////////////
+        */
+        /* Set all user input validation/events
+            PASS:
+                - fltrs = object from srdom
+                  containing the input elements
+                  that need the change event
+            Takes filter and with the values, sets
+             a change event that refreshes the
+             display with the new values. Also
+             included will be input validation
+             to flag any bad values from getting
+             in.
+        */
+        var SetInputFilterEvents = (fltrs)=>{
+            if(fltrs){
+                for(let f in fltrs){
+                    let inp = document.getElementById(fltrs[f]);
+                    if(inp){
+                        inp.addEventListener('change',fltrchange);
+                    }
+                }
+            }
+        }
+        /* Change event that updates all the Referral table
+        */
+        var fltrchange = (ele)=>{
+            RefreshRefLists(mrlist);
+
+        }
+        /* Get user filters from screen
+            PASSED
+                - status = Referral status code
+                - fltrs = object containing input
+                          elements.
+        */
+        var viewfltr = (status,fltrs)=>{
+            var fltr = {};
+            if(fltrs){
+                for(let f in fltrs){ //loop through all the filter elements
+                    let inp = document.getElementById(fltrs[f]);
+                    if(inp){
+                        if(inp.value != ''){
+                            fltr[f] = inp.value;
+                        }else{}//console.log('blank');}
+                    }else{}//console.log('No element');}
+                }
+            }
+            if(status){
+                fltr.status = status;
+            }
+            return fltr;
+        }
+        /////////////////////////////////////////////////////////
+
+
+        // GET referal list from local storage, and setup display
+        var mrlist = new SrvReferals(JSON.parse(localStorage.getItem(referalls.refList)));
+
+        SetDataList(mrlist.GETsrlist(),srdom.rview.utils.datalist);
+
+        SetInputFilterEvents(srdom.rview.utils.userfilters);
+        //Refresh the summary for tables
+        var RefreshRefSummary = ()=>{
+            document.getElementById(srdom.summary.totalPay).innerText = `$${apprList.GETpayout()}.00`;
+            document.getElementById(srdom.summary.apprCount).innerText = apprList.GETsrlist().length;
+            document.getElementById(srdom.summary.denyCount).innerText = denyList.GETsrlist().length;
+            document.getElementById(srdom.summary.openCount).innerText = openList.GETsrlist().length;
+
+            document.getElementById(srdom.summary.submitCount).innerText = apprList.GETsrlist().length +
+                                                                           denyList.GETsrlist().length +
+                                                                           openList.GETsrlist().length;
+        }
+
+        // Refresh the tables after updates are made
+        var RefreshRefLists = (mlist)=>{
+            apprList.SETsrlist(mlist.TRIMsrlist(viewfltr('A',srdom.rview.utils.userfilters)),srdom.rview.appr);
+            apprList.SetTable();
+            denyList.SETsrlist(mlist.TRIMsrlist(viewfltr('D',srdom.rview.utils.userfilters)),srdom.rview.deny);
+            denyList.SetTable();
+            openList.SETsrlist(mlist.TRIMsrlist(viewfltr('O',srdom.rview.utils.userfilters)),srdom.rview.open);
+            openList.SetTable();
+            closeList.SETsrlist(mlist.TRIMsrlist(viewfltr('C',srdom.rview.utils.userfilters)),srdom.rview.close);
+            closeList.SetTable();
+
+            RefreshRefSummary();
+        }
+
+        /* Sync referals with database
+            Loops through the viewing of the page
+        */
+        var msyncr = true; //controls if the sync cycle continues
+        var msynctime = 2000; //time in miliseconds before each sync
+        var msyncnt = 1 //cycle counter
+        var msync = (c)=>{ //sync cycle looper
+            setTimeout(()=>{
+                ipcRenderer.send(dashroutes.updateReferals,JSON.parse(localStorage.getItem(referalls.editlist))); //pass list of updated referrals to main process
+                localStorage.setItem(referalls.editlist,JSON.stringify(null)); //set update list to null
+
+                ipcRenderer.send(dashroutes.getAllReferals,'DASH'); //get updated referral list from main process
+                if(msyncr){msync(c++);}
+                else{return c;}
+            },(msynctime));
+        }
+
+        // Initialize the needed lists for display
+        var apprList = new SrvReferalDisplay(mrlist.TRIMsrlist(viewfltr('A',srdom.rview.utils.userfilters)),srdom.rview.appr);
+        var denyList = new SrvReferalDisplay(mrlist.TRIMsrlist(viewfltr('D',srdom.rview.utils.userfilters)),srdom.rview.deny);
+        var openList = new SrvReferalDisplay(mrlist.TRIMsrlist(viewfltr('O',srdom.rview.utils.userfilters)),srdom.rview.open);
+        var closeList = new SrvReferalDisplay(mrlist.TRIMsrlist(viewfltr('C',srdom.rview.utils.userfilters)),srdom.rview.close);
+
+
+        RefreshRefSummary(); //Initial Summary Setup
+        SetEditModOptions(mrlist);
+        setViewSwitches(srdom.rview); //set the referal tables view
+
+
+        document.getElementById('GOTO-reporting').addEventListener('click',(ele)=>{
+          ipcRenderer.send(pageroutes.reporting,'Open Reporting...');
+
+        });
+        //////////////////////////////////////////////////////////
+
+        msync(msyncnt); //start the dash refresh cycle
+
+
+        /*  RESPONSES FROM MAIN PROCESS ///////////////////////////
+        */
+        ipcRenderer.on(dashroutes.updateReferals,(eve,data)=>{
+            console.log(data);
+        })
+
+        /* Recieve Request for Referals
+        */
+        ipcRenderer.on(dashroutes.getAllReferals,(eve,data)=>{
+            if(data){
+                if(JSON.stringify(mrlist.GETsrlist())!= JSON.stringify(data)){
+                    console.log('Referal List has changed...');
+                    mrlist.SETsrlist(data);
+                    localStorage.setItem(referalls.refList,JSON.stringify(mrlist.TRIMsrlist()));//save in local storage
+                    RefreshRefLists(mrlist);
+                }
+            }else{
+                msyncr = false; //stop syncying
+                console.log("Failed to Get Referals...");
+                //notify not connected to database
+                //read only
+            }
+        });
+
+        ipcRenderer.on(dashroutes.runEOM,(eve,data)=>{
+            if(data){
+                console.log('REPORT RAN SUCCESSFULLY!!');
+            }else{console.log('REPORT DID NOT RUN!!');}
+        });
+
+        ipcRenderer.on(pageroutes.reporting,(eve,data)=>{
+          console.log(data);
+        });
+        ///////////////////////////////////////////////////////////
+
+
+
+
+        console.log(GetDataList(srdom.rview.utils.datalist.TechID));
+    </script>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script> window.$ = window.jQuery = require("jquery");</script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>COMMISSION REFERRAL MANAGER</title>
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Oswald"/>
+        <link rel="stylesheet" href="../css/vg-utility.css"/>
+        <link rel="stylesheet" href="../css/vg-poppers.css"/>
+        <link rel="stylesheet" href="../css/referral-general.css"/>
+        <link rel="stylesheet" href="../css/referral-table-styles.css"/>
+        <link rel="stylesheet" href="../css/referral-editor-styles.css"/>
+    </head>
+    <body>
+
+        <!-- TOAST BOX ------>
+        <div id="vg-toast-tr">
+          <div class="vg-note-list">
+          </div>
+        </div>
+
+
+
+        <!--REPORT DASH: THIS MONTH VIEW ----------------------->
+        <div id="ref-header">
+          <div class="ref-report-nav">
+            <div id="GOTO-userdash" class="q-action-button">< DASH</div>
+          </div>
+          <div id="ref-title">End Of Month Report</div>
+          <div>
+            <div id="toggle-report-dash" class="q-action-button">TOGGLE</div>
+          </div>
+        </div>
+        <!------------------------------------------------------>
+
+        <div id="ref-container">
+          <div id="ref-table-descrs">
+            <div id="ref-table-filters" style="display:none">
+                <div>Tech ID</div><input type="search" id="ref-table-techid" class="ref-table-filter" list="ref-techid-list"/>
+                <div>WO #</div><input id="ref-table-wo"/>
+                <div>Client Name</div><input id="ref-table-custlname" type="search"/>
+                <div>Refered To</div><input type="search" id="ref-table-referto" class="ref-table-filter" list="ref-referto-list"/>
+                <div>Address</div><input type="search" id="ref-table-address"/>
+                <div>Period</div><div id="ref-period-search"><input type="date" id="ref-table-sdate"/>
+                 - <input type="date" id="ref-table-edate"/></div>
+            </div>
+          </div>
+          <div class="ref-table-summary">
+              <div>COMMISSION</div><div id="ref-total-commish">$0</div>
+              <div>APPROVED</div><div id="ref-table-appr-cnt">0</div>
+              <div>LOST</div><div id="ref-table-deni-cnt">0</div>
+              <div>OPEN</div><div id="ref-table-open-cnt">0</div>
+              <div>SUBMITTED</div><div id="ref-sbmt-cnt">0</div>
+          </div>
+          <div>
+
+          <div id="ref-report-EOM-area">
+            <div class="ref-report-header-functions">
+                <div id="runEOM" class="q-action-button">RUN</div>
+                <div id="cleanEOM" class="q-action-button">CLEAN</div>
+                <div id="refreshEOM" class="q-action-button">REFRESH</div>
+                <div id="printEOM" class="q-action-button">PRINT</div>
+              </div>
+              <div class="ref-report-EOM-info">
+                <label>Month:</label><input id="ref-report-EOM-reportmonth" type="search"list="ref-report-month-names" placeholder="Report Month"/>
+                <label>Report Run?</label><div id="ref-report-EOM-hasrun"/></div>
+                <label>Date Ran:</label><div id="ref-report-EOM-rundate"/></div>
+                <label>Ran By:</label><div id="ref-report-EOM-runbywho"/></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="ref-view-cont">
+          <div id="ref-view-table-cont" style="display:none"><!--TABLE OF REFERRALS-->
+          </div>
+          <div id="eom-view-cont">
+
+            <div id="ref-report-print-summary">
+              <!--Spiff Summary-->
+              <div>
+                SPIFF SUMMARY
+              </div>
+            </div>
+            <div id="ref-report-print-cont"><!--PRINT REPORT VIEW-->
+            </div>
+          </div>
+
+        </div>
+
+        <!--TECH REPORT PRINT TEMPLATE-------------------------->
+        <div id="report-print-tech-page-template" style="display:none">
+          <div class="report-print-tech-page">
+            <div class="report-print-main-header">
+                <div class="report-print-techinfo">
+                    <div class="rp-techid">VOGCH</div>
+                    <div class="rp-tlname">Vogel</div>
+                    <div class="rp-tfname">Christian</div>
+                </div>
+                <div>End Of Month</div>
+                <div class="report-print-period">March, 2022</div>
+            </div>
+            <div class="report-print-summary">
+              <div class="report-print-scoreboard">
+                <div>COMMISSION</div><div class="rp-total-commish">$0</div>
+                <div>APPROVED</div><div class="rp-table-appr-cnt">0</div>
+                <div>LOST</div><div class="rp-table-deni-cnt">0</div>
+                <div>OPEN</div><div class="rp-table-open-cnt">0</div>
+                <div>SUBMITTED</div><div class="rp-sbmt-cnt">0</div>
+              </div>
+              <div class="report-print-tally-res">
+                <div>Residential Replacement Unit ($40)</div><input>
+                <div>Residential Replacement System ($80)</div><input>
+                <div>Residential Membership Upgrade/New ($30)</div><input>
+                <div>Residential Membership Renewal ($5)</div><input>
+              </div>
+              <div class="report-print-tally-comm">
+                <div>Commercial Initial Replacement ($40)</div><input>
+                <div>Commercial Add'l Replacement ($10)</div><input>
+                <div>Commercial Maintenance Referral ($10)</div><input>
+                <div>IAQ or Enchancement Sale ($30)</div><input>
+              </div>
+            </div>
+            <div class="report-print-header-appr">Approved Commissions</div>
+            <div class="rp-appr-table" class="report-print-header-row">
+              <div class="rp-table-row">
+                <div>Date</div>
+                <div>WO</div>
+                <div>Address</div>
+                <div>Last</div>
+                <div>First</div>
+                <div>Ref'd To</div>
+                <div>Spiff For</div>
+                <div>Paid</div>
+                <div>Comments</div>
+              </div>
+            </div>
+            <div class="report-print-header-lost">Lost Commissions</div>
+            <div class="rp-lost-table" class="report-print-header-row">
+              <div class="rp-table-row">
+                <div>Date</div>
+                <div>WO</div>
+                <div>Address</div>
+                <div>Last</div>
+                <div>First</div>
+                <div>Ref'd To</div>
+                <div>Spiff For</div>
+                <div>Paid</div>
+                <div>Comments</div>
+              </div>
+            </div>
+            <div class="report-print-header-open">Open Commissions</div>
+            <div class="rp-open-table" class="report-print-header-row">
+              <div class="rp-table-row">
+                <div>Date</div>
+                <div>WO</div>
+                <div>Address</div>
+                <div>Last</div>
+                <div>First</div>
+                <div>Ref'd To</div>
+                <div>Spiff For</div>
+                <div>Paid</div>
+                <div>Comments</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!------------------------------------------------------>
+
+        <div><!--DATALIST FOR INPUTS-->
+            <datalist id="ref-report-month-names">
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>Novemeber</option>
+              <option>December</option>
+            </datalist>
+            <datalist id="ref-status-list"><!--STATUS CODE LIST-->
+                <option>O</option>
+                <option>A</option>
+                <option>D</option>
+                <option>C</option>
+            </datalist>
+            <datalist id="ref-techid-list"><!--TECH CODE LIST-->
+
+            </datalist>
+            <datalist id="ref-referto-list"><!--REFER TO LIST-->
+            </datalist>
+            <datalist id="ref-spifffor-list"><!--SPIFF FOR LIST-->
+            </datalist>
+        </div>
+
+    </body>
+
+    <script>
+        const {ipcRenderer} = require('electron');
+        const os=require('os');
+        var {
+          SetDataList,
+          GetDataList
+        } = require('../../repo/toolbox/displaytools.js');
+        var { //locatStorage
+          referalls,
+          reportls
+        } = require('../js/lstore.js'); //LocalStore
+        var { //routes
+          reportroutes,
+          pageroutes,
+          referralroutes
+        } = require('../js/routes.js'); //Routes to Main Process
+        var { // Service Display Files
+            srdom,
+            SrvReferals,
+        } = require('../js/srvrefdisplay.js');
+
+        var {RunEndOfMonth,PrintEOM}=require('../js/referalReport.js');
+        var {repdom}=require('../js/commdoms.js');
+        var {techcreds}=require('../js/vg-user-tech.js');
+        var {DropNote}=require('../js/vg-poppers.js');
+
+
+        /* User Filtering ///////////////////////////////////////
+        */
+        /* Set all user input validation/events
+            PASS:
+                - fltrs = object from srdom
+                  containing the input elements
+                  that need the change event
+            Takes filter and with the values, sets
+             a change event that refreshes the
+             display with the new values. Also
+             included will be input validation
+             to flag any bad values from getting
+             in.
+        */
+        var SetInputFilterEvents = (fltrs)=>{
+            if(fltrs){
+                for(let f in fltrs){
+                    let inp = document.getElementById(fltrs[f]);
+                    if(inp){
+                        inp.addEventListener('change',fltrchange);
+                    }
+                }
+            }
+        }
+        /* Change event that updates all the Referral table
+        */
+        var fltrchange = (ele)=>{
+            RefreshRefLists(mrlist);
+
+        }
+        /* Get user filters from screen
+            PASSED
+                - status = Referral status code
+                - fltrs = object containing input
+                          elements.
+        */
+        var viewfltr = (status,fltrs)=>{
+            var fltr = {};
+            if(fltrs){
+                for(let f in fltrs){ //loop through all the filter elements
+                    let inp = document.getElementById(fltrs[f]);
+                    if(inp){
+                        if(inp.value != ''){
+                            fltr[f] = inp.value;
+                        }else{}//console.log('blank');}
+                    }else{}//console.log('No element');}
+                }
+            }
+            if(status){
+                fltr.status = status;
+            }
+            return fltr;
+        }
+        /////////////////////////////////////////////////////////
+
+        //Sets the report summary given all
+        var SetReportSummary = ()=>{
+          var repdata = JSON.parse(localStorage.getItem(reportls.EOMrepdata));
+          if(repdata || repdata!=undefined){
+            var list = new SrvReferals(repdata.list);
+
+            var acnt = list.TRIMsrlist({status:'A'}).length;
+            var dcnt = list.TRIMsrlist({status:'D'}).length;
+            var ocnt = list.TRIMsrlist({status:'O'}).length;
+            document.getElementById(repdom.sumform.totalPay).innerText = `${new SrvReferals(list.TRIMsrlist({status:'A'})).GETpayout()}.00`;
+            document.getElementById(repdom.sumform.apprCount).innerText = acnt;
+            document.getElementById(repdom.sumform.denyCount).innerText = dcnt;
+            document.getElementById(repdom.sumform.openCount).innerText = ocnt;
+
+            document.getElementById(repdom.sumform.submitCount).innerText = acnt+dcnt+ocnt;
+          }
+        }
+
+        // GET referal list from local storage
+        var mrlist = new SrvReferals(JSON.parse(localStorage.getItem(referalls.refList)));
+
+        //GOTO User DASH
+        document.getElementById('GOTO-userdash').addEventListener('click',(ele)=>{
+          ipcRenderer.send(pageroutes.userdash,'Open User Dash...');
+        });
+
+        /*  Setup Request from Main Process /////////////////////////////////////////////
+        */
+        ipcRenderer.send(reportroutes.GETlast,'Report Page Open');
+        ////////////////////////////////////////////////////////////////////////////////
+
+        /*  Setup for report actions ///////////////////////////////////////////////////
+        */
+        //RUN EOM
+        document.getElementById(repdom.EOMform.actions.runEOM).addEventListener('dblclick',(ele)=>{
+          var repmon = null;
+          try{
+            repmon = document.getElementById(repdom.EOMform.repform.month).value;
+          }catch{console.log('Report Month element not setup')}
+
+          if((repmon || repmon !=undefined)&& repmon!='' ){ //check if the report month is a good month
+            var data={ //report datastructure
+              ids:techcreds, //get all tech credentials {user,lname,fname}
+              list:mrlist.TRIMsrlist({status:'A,D,O'}),
+              date:new Date(),
+              runner:os.userInfo().username, //get the current user
+              month:repmon
+            }
+            ipcRenderer.send(reportroutes.runEOM,RunEndOfMonth(data));
+          }
+          else{console.log('Bad Report Month');}
+        });
+        //CLEAN REFERRAL REPORT LIST
+        document.getElementById(repdom.EOMform.actions.cleanEOM).addEventListener('dblclick',(ele)=>{
+          ipcRenderer.send(reportroutes.cleanEOM,mrlist.TRIMsrlist({status:'D,A'}));
+        });
+        //REFRESH REFERRALS LIST
+        document.getElementById(repdom.EOMform.actions.refreshEOM).addEventListener('dblclick',(ele)=>{
+          console.log('Refreshing last');
+          var repmonth = document.getElementById(repdom.EOMform.repform.month).value;
+          if(repmonth!=''){
+            ipcRenderer.send(reportroutes.refreshEOM,mrlist.TRIMsrlist({status:'C',reportmonth:repmonth}));
+          }else{console.log('No Refresh')}
+        });
+        //PRINT REFERRAL REPORT
+        document.getElementById(repdom.EOMform.actions.printEOM).addEventListener('dblclick',(ele)=>{
+          SetReportSummary();
+          PrintEOM();
+        });
+        ///////////////////////////////////////////////////////////////////////////////
+
+        /*  Recieve Request for Referals
+
+            This is waiting for a button request for updated
+            referral list from database. This is familiar as
+            it is very similar to the call on dash.html
+        */
+        ipcRenderer.on(referralroutes.GETall,(eve,data)=>{
+            if(data){
+                if(JSON.stringify(mrlist.GETsrlist())!= JSON.stringify(data)){ //if the data already load is == OR !=
+                    mrlist.SETsrlist(data);
+                    localStorage.setItem(referalls.refList,JSON.stringify(mrlist.TRIMsrlist()));//save in local storage
+                    //Refresh the report being viewed
+                }
+            }
+            else{
+                msyncr = false; //stop syncying
+                console.log("Failed to Get Referals...");
+            }
+        });
+        //confirmation of a properly run report
+        ipcRenderer.on(reportroutes.runEOM,(eve,data)=>{
+            if(data.run){
+                DropNote('tr',data.message,'green');
+                console.log('REPORT RAN - ',data.report);
+                document.getElementById(repdom.EOMform.repform.date).innerText = data.report.date.toISOString().split('T')[0];
+                document.getElementById(repdom.EOMform.repform.runner).innerText = data.report.runner;
+                document.getElementById(repdom.EOMform.repform.has).innerText = 'YES';
+                //mark above with a YES css class
+
+                localStorage.setItem(reportls.EOMrepdata,JSON.stringify(data.report));//save report locally
+            }else{
+              DropNote('tr',data.message,'red');
+              console.log('REPORT DID NOT SAVE!!');
+            }
+        });
+        //confirmation of a clean
+        ipcRenderer.on(reportroutes.cleanEOM,(eve,data)=>{
+          if(data.clean){
+            DropNote('tr',data.message,'green');
+            console.log('REFERRALS WERE CLEANED!');
+            document.getElementById(repdom.EOMform.repform.month).innerText='';
+            document.getElementById(repdom.EOMform.repform.date).innerText='';
+            document.getElementById(repdom.EOMform.repform.runner).innerText='';
+            document.getElementById(repdom.EOMform.repform.has).innerText='NO';
+
+          }
+          else{
+            DropNote('tr',data.message,'red');
+            console.log('REFERRALS WERE NOT CLEANED!');
+          }
+        })
+        //confirmation of refreshe
+        ipcRenderer.on(reportroutes.refreshEOM,(eve,data)=>{
+          if(data.refresh){
+            DropNote('tr',data.message,'green');
+            ipcRenderer.send(reportroutes.GETlast,'Refresh Call')
+            console.log('Everything Refreshed');
+          }
+          else{
+            DropNote('tr',data.message,'red');
+            console.log('Refresh Failed')
+          }
+        });
+
+        /*  Setup This Months Report
+            data={
+              status =boolean
+              repdata =report data object
+            }
+        */
+        ipcRenderer.on(reportroutes.GETlast,(eve,data)=>{
+          if(data){
+            //check if the report was clean this month
+            if(data.status){
+              localStorage.setItem(reportls.EOMrepdata,JSON.stringify(data.repdata));
+              console.log(data);
+              //setup the form
+              document.getElementById(repdom.EOMform.repform.month).value=data.repdata.month;
+              document.getElementById(repdom.EOMform.repform.date).innerText=data.repdata.date.toISOString().split('T')[0];
+              document.getElementById(repdom.EOMform.repform.runner).innerText=data.repdata.runner;
+              document.getElementById(repdom.EOMform.repform.has).innerText='YES';
+            }
+            else{document.getElementById(repdom.EOMform.repform.has).innerText='NO'}
+          }
+        })
+
+
+        // Report Dash Toggle Button
+        document.getElementById(repdom.buttons.toggle).addEventListener('click',(ele)=>{
+          var fltcont = document.getElementById(repdom.fltform.cont);
+          var fltview = document.getElementById(repdom.views.FLTview);
+
+          var eomcont = document.getElementById(repdom.EOMform.cont);
+          var eomview = document.getElementById(repdom.views.EOMview);
+
+          if($(eomcont).is(':visible')){
+            document.getElementById(repdom.title).innerText = 'Commission Reporting';
+            $(eomcont).hide();
+            $(eomview).hide();
+
+            $(fltcont).show();
+            $(fltview).show();
+          }
+          else{
+            document.getElementById(repdom.title).innerText = 'End Of Month Report';
+            $(eomcont).show();
+            $(eomview).show();
+
+            $(fltcont).hide();
+            $(fltview).hide();
+          }
+        });
+
+    </script>
+
+
+</html>
